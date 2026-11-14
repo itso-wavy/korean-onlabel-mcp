@@ -115,13 +115,13 @@ Node.js 20.12 이상이 필요합니다.
 **Claude Code**
 
 ```bash
-claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- npx -y github:itso-wavy/korean-onlabel-mcp
+claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- npx -y korean-onlabel-mcp
 ```
 
 Windows 네이티브 환경에서는 `npx` 앞에 `cmd /c`를 붙입니다.
 
 ```bash
-claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- cmd /c npx -y github:itso-wavy/korean-onlabel-mcp
+claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- cmd /c npx -y korean-onlabel-mcp
 ```
 
 **Claude Desktop** (`claude_desktop_config.json`)
@@ -131,7 +131,7 @@ claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- cmd 
   "mcpServers": {
     "korean-onlabel": {
       "command": "npx",
-      "args": ["-y", "github:itso-wavy/korean-onlabel-mcp"],
+      "args": ["-y", "korean-onlabel-mcp"],
       "env": { "DATA_GO_KR_SERVICE_KEY": "발급받은_키" }
     }
   }
@@ -143,14 +143,17 @@ claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- cmd 
 ```toml
 [mcp_servers.korean-onlabel]
 command = "npx"
-args = ["-y", "github:itso-wavy/korean-onlabel-mcp"]
+args = ["-y", "korean-onlabel-mcp"]
 env = { DATA_GO_KR_SERVICE_KEY = "발급받은_키" }
-startup_timeout_sec = 120
 ```
 
-Codex는 서버 시작을 기본 30초까지 기다립니다. 첫 실행은 내려받기와 빌드 때문에 30초를 넘길 수 있어서 `startup_timeout_sec`를 늘려 둡니다. `codex mcp add` 명령으로도 등록할 수 있지만, 이 값은 설정 파일에서만 바꿀 수 있습니다.
+명령으로 등록해도 같은 설정이 들어갑니다.
 
-그 밖의 MCP 클라이언트(Cursor, VS Code 등)도 같은 방식으로 `npx -y github:itso-wavy/korean-onlabel-mcp`를 실행하고 환경변수 `DATA_GO_KR_SERVICE_KEY`를 넘기면 됩니다.
+```bash
+codex mcp add korean-onlabel --env DATA_GO_KR_SERVICE_KEY=발급받은_키 -- npx -y korean-onlabel-mcp
+```
+
+그 밖의 MCP 클라이언트(Cursor, VS Code 등)도 같은 방식으로 `npx -y korean-onlabel-mcp`를 실행하고 환경변수 `DATA_GO_KR_SERVICE_KEY`를 넘기면 됩니다.
 
 키를 넣지 않아도 서버는 뜹니다. 도구를 호출하면 위 신청 절차를 안내하는 오류를 돌려줍니다.
 
