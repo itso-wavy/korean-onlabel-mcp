@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      # vitest 5는 Node 22.12 이상만 지원한다. Node 20에서는 빌드와 실행 확인만 한다.
+      # 실제 API 테스트(test/live.test.ts)는 키가 없으면 건너뛴다.
+      - run: npm test
+        if: matrix.node != 20
+      - run: npm run build
+      - name: Smoke test the built server over stdio
+        run: |
+          node -e '
+          import("@modelcontextprotocol/sdk/client/index.js").then(async ({ Client }) => {
+            const { StdioClientTransport } = await import("@modelcontextprotocol/sdk/client/stdio.js");
+            const client = new Client({ name: "ci", version: "0" });
+            await client.connect(new StdioClientTransport({ command: "node", args: ["dist/index.js"] }));
+            const { tools } = await client.listTools();
+            if (tools.length !== 3) throw new Error(`expected 3 tools, got ${tools.length}`);
+            await client.close();
+            console.log("tools:", tools.map((t) => t.name).join(", "));
+          });'
