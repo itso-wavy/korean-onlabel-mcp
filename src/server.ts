@@ -129,7 +129,7 @@ export function createServer(client: DataGoKrClient): McpServer {
     "review_ad_copy",
     {
       title: "광고 문구 허가 범위 점검",
-      description: "광고·안내 문구를 제품의 식약처 허가 원문과 문장 단위로 대조해 근거 있음/근거 없음/판단 보류로 판정한다.",
+      description: "광고·안내 문구를 제품의 식약처 허가 원문과 문장 단위로 대조해 원문과 충돌/근거 없음/판단 보류/근거 있음으로 판정한다.",
       argsSchema: {
         copy_text: z.string().describe("점검할 광고 문구"),
         product: z.string().describe("제품명, 모델명 또는 허가번호"),

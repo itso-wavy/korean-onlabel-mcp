@@ -105,5 +105,7 @@ describe("MCP 서버", () => {
     expect(body).toContain("열을 1초 만에 잡아 줍니다");
     expect(body).toContain("제품 종류: 의료기기");
     expect(body).toContain("| # | 문구 | 판정 |");
+    expect(body).toContain("원문과 충돌");
+    expect(body).toContain("include_precautions=true");
   });
 });
