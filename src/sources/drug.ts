@@ -28,6 +28,12 @@ function status(row: Row): { status: string; active: boolean } {
   return { status: "정상", active: true };
 }
 
+/** GBN_NAME("효능효과변경, 2014-03-07/용법용량변경, 2007-11-16/...")에서 가장 최근의 효능효과 변경일 */
+export function lastEfficacyChange(gbn: unknown): string | undefined {
+  const dates = [...str(gbn).matchAll(/효능효과변경,\s*(\d{4}-\d{2}-\d{2})/g)].map((m) => m[1]!);
+  return dates.sort().at(-1);
+}
+
 function isPrescription(value: string): boolean {
   return value.includes("전문");
 }
@@ -95,9 +101,11 @@ export async function getDrugPermit(
     attributes: [
       ["전문/일반", kind],
       ["허가/신고", str(row.PERMIT_KIND_NAME)],
+      ["효능효과 최종 변경", lastEfficacyChange(row.GBN_NAME) ?? ""],
       ["유효성분", str(row.MAIN_ITEM_INGR)],
       ["성상", str(row.CHART)],
       ["위탁제조업체", str(row.CNSGN_MANUF)],
+      ["허가 원문 PDF", str(row.EE_DOC_ID)],
     ],
     warnings,
   };

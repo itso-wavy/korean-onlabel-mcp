@@ -85,10 +85,14 @@ class TtlCache {
   }
 }
 
-/** data.go.kr 게이트웨이 오류(XML)의 returnReasonCode → 마커 */
+/** data.go.kr 게이트웨이 오류(XML 또는 JSON)의 returnReasonCode → 마커 */
 function gatewayError(body: string, source: SourceType): OnlabelError | undefined {
-  const reason = body.match(/<returnReasonCode>\s*(\d+)\s*<\/returnReasonCode>/)?.[1];
-  const auth = body.match(/<returnAuthMsg>\s*([^<]+?)\s*<\/returnAuthMsg>/)?.[1];
+  const reason =
+    body.match(/<returnReasonCode>\s*(\d+)\s*<\/returnReasonCode>/)?.[1] ??
+    body.match(/"returnReasonCode"\s*:\s*"?(\d+)"?/)?.[1];
+  const auth =
+    body.match(/<returnAuthMsg>\s*([^<]+?)\s*<\/returnAuthMsg>/)?.[1] ??
+    body.match(/"returnAuthMsg"\s*:\s*"([^"]*)"/)?.[1];
   if (!reason && !auth) return undefined;
   const page = `${SERVICE_NAMES[source]} ${SERVICE_PAGES[source]}`;
   switch (reason) {
@@ -101,6 +105,11 @@ function gatewayError(body: string, source: SourceType): OnlabelError | undefine
       return new OnlabelError(
         "SERVICE_NOT_APPLIED",
         `이 API에 대한 활용신청이 없습니다. 다음 페이지에서 활용신청하세요: ${page}`,
+      );
+    case "12":
+      return new OnlabelError(
+        "UPSTREAM_ERROR",
+        `공공데이터포털이 이 API 경로를 찾지 못했습니다(서비스 폐기 또는 버전 변경). 서버를 최신 버전으로 업데이트하세요. (${page})`,
       );
     case "22":
       return new OnlabelError(
@@ -136,8 +145,9 @@ export class DataGoKrClient {
   constructor(opts: ClientOptions = {}) {
     this.serviceKey = normalizeServiceKey(opts.serviceKey);
     this.fetchImpl = opts.fetchImpl ?? (globalThis.fetch as unknown as FetchLike);
-    this.timeoutMs = opts.timeoutMs ?? 15_000;
-    this.retries = opts.retries ?? 2;
+    // 식약처 API는 상세 조회에 20초 넘게 걸릴 때가 있다(2026-11 실측 4~22초).
+    this.timeoutMs = opts.timeoutMs ?? 40_000;
+    this.retries = opts.retries ?? 1;
     this.cache = new TtlCache(500, opts.now ?? Date.now);
   }
 
@@ -201,9 +211,9 @@ export class DataGoKrClient {
 
   private parse(body: string, source: SourceType): Page<Row> {
     const trimmed = body.trim();
+    const gw = gatewayError(trimmed, source);
+    if (gw) throw gw;
     if (!trimmed.startsWith("{")) {
-      const gw = gatewayError(trimmed, source);
-      if (gw) throw gw;
       throw new OnlabelError("UPSTREAM_ERROR", `JSON이 아닌 응답을 받았습니다: ${maskKey(trimmed.slice(0, 200), this.serviceKey)}`);
     }
     let json: Row;

@@ -16,6 +16,14 @@ function attr(attrs: string, name: string): string | undefined {
 function clean(fragment: string): string {
   let s = fragment.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1");
   s = decodeEntities(s);
+  if (/<(table|tbody|tr|td|th)\b/i.test(s)) {
+    // 표: 소스의 서식용 줄바꿈을 없애고, 셀 안의 문단·줄바꿈은 공백으로 바꿔 한 행을 한 줄로 만든다.
+    s = s
+      .replace(/\s*[\r\n]+\s*/g, " ")
+      .replace(/<(t[dh])\b[^>]*>([\s\S]*?)<\/\1>/gi, (_m, _tag: string, inner: string) =>
+        `${inner.replace(/<br\s*\/?>|<\/?p\b[^>]*>/gi, " ").trim()} | `,
+      );
+  }
   s = s
     .replace(/<br\s*\/?>/gi, "\n")
     .replace(/<\/(tr|p|li)>/gi, "\n")

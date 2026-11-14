@@ -25,7 +25,9 @@ export function renderSearch(type: SourceType, by: string, query: string, result
     const hint =
       type === "device"
         ? "의료기기 품목명은 브랜드가 아니라 분류 이름입니다(예: 체온계). by를 model(모델명)이나 company(업체명)로 바꿔 다시 검색하세요."
-        : "제품명 일부만 넣거나 by를 company(업체명), ingredient(주성분)로 바꿔 다시 검색하세요.";
+        : by === "ingredient"
+          ? "주성분은 영문명으로 저장되어 있습니다(예: Acetaminophen). 영문명으로 다시 검색하거나 by=name으로 한글 성분명을 검색하세요."
+          : "제품명 일부만 넣거나 by를 company(업체명), ingredient(주성분 영문명)로 바꿔 다시 검색하세요.";
     return `[NOT_FOUND] ${TYPE_LABEL[type]} ${by}="${query}" 검색 결과가 0건입니다. 조회 실패가 아니라 결과가 없는 것입니다.\n${hint}`;
   }
   const lines = [

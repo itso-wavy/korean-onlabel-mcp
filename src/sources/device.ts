@@ -18,6 +18,18 @@ export type DeviceSearchBy = keyof typeof DEVICE_SEARCH_FIELDS;
 
 const HOUR = 3_600_000;
 
+/**
+ * 허가번호는 "수인 26-4414 호"처럼 공백까지 맞아야 검색된다.
+ * "수인26-4414호"처럼 붙여 쓴 입력도 찾을 수 있게 공식 표기로 바꾼다.
+ */
+export function normalizePermitNo(input: string): string {
+  const compact = input.replace(/\s+/g, "");
+  const m = compact.match(/^([가-힣]{2})(\d{2}-\d+)호?$/);
+  return m ? `${m[1]} ${m[2]} 호` : input.trim();
+}
+
+const sameId = (a: string, b: string) => a.replace(/\s+/g, "") === b.replace(/\s+/g, "");
+
 type Row = Record<string, unknown>;
 
 function status(row: Row): { status: string; active: boolean } {
@@ -51,7 +63,8 @@ export async function searchDevices(
   pageNo: number,
   limit: number,
 ): Promise<SearchResult> {
-  const page = await client.get("device", ITEM_PATH, { [DEVICE_SEARCH_FIELDS[by]]: query, pageNo, numOfRows: limit }, HOUR);
+  const value = by === "permit_no" ? normalizePermitNo(query) : query;
+  const page = await client.get("device", ITEM_PATH, { [DEVICE_SEARCH_FIELDS[by]]: value, pageNo, numOfRows: limit }, HOUR);
   const items: ProductSummary[] = [];
   for (const [id, rows] of groupByPermit(page.items)) {
     const first = rows[0]!;
@@ -73,8 +86,9 @@ export async function searchDevices(
 }
 
 export async function getDevicePermit(client: DataGoKrClient, permitNo: string): Promise<PermitDetail | null> {
-  const page = await client.get("device", ITEM_PATH, { PRDUCT_PRMISN_NO: permitNo, pageNo: 1, numOfRows: 100 }, 24 * HOUR);
-  const rows = page.items.filter((r) => str(r.PRDUCT_PRMISN_NO) === permitNo.trim());
+  const official = normalizePermitNo(permitNo);
+  const page = await client.get("device", ITEM_PATH, { PRDUCT_PRMISN_NO: official, pageNo: 1, numOfRows: 100 }, 24 * HOUR);
+  const rows = page.items.filter((r) => sameId(str(r.PRDUCT_PRMISN_NO), official));
   if (rows.length === 0) return null;
   const first = rows[0]!;
   const purposes = [...new Set(rows.map((r) => str(r.USE_PURPS)).filter(Boolean))];

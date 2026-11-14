@@ -43,9 +43,11 @@ export function createServer(client: DataGoKrClient): McpServer {
       title: "식약처 허가 제품 검색",
       description: [
         "식약처 허가를 받은 의료기기·의약품을 찾아 식별자(get_permit의 id)를 돌려준다.",
-        "의료기기 by: product(품목명, 분류 이름 예: 체온계) / model(모델명) / company(업체명) / permit_no(품목허가번호). 기본 product.",
-        "의약품 by: name(제품명) / company(업체명) / ingredient(주성분) / permit_no(품목허가번호). 기본 name.",
-        "의료기기를 브랜드로 찾을 때는 model이나 company를 쓴다.",
+        "의료기기 by: product(품목명, 분류 이름 예: 체온계) / model(모델명, 대소문자 구분) / company(업체명) / permit_no(품목허가번호 예: 수인 26-4414 호). 기본 product.",
+        "의약품 by: name(제품명) / company(업체명) / ingredient(주성분 영문명 예: Acetaminophen) / permit_no(품목허가번호). 기본 name.",
+        "모두 부분 일치로 찾는다. 의료기기를 브랜드로 찾을 때는 model이나 company를 쓴다.",
+        "의약품 주성분은 영문명으로 저장되어 있다. 한글 성분명은 by=name으로 찾으면 제품명에 성분명이 들어간 제품이 나온다.",
+        "식약처 API 응답이 10~20초 걸릴 수 있다.",
       ].join("\n"),
       inputSchema: {
         type: typeSchema,

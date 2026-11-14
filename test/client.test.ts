@@ -138,3 +138,17 @@ describe("DataGoKrClient.get", () => {
     expect(calls).toHaveLength(2);
   });
 });
+
+describe("게이트웨이 JSON 오류", () => {
+  it("JSON으로 온 returnReasonCode도 마커로 바꾼다", async () => {
+    const body = JSON.stringify({
+      OpenAPI_ServiceResponse: {
+        cmmMsgHeader: { errMsg: "NO_OPENAPI_SERVICE_ERROR", returnAuthMsg: "해당 오픈API 서비스가 없거나 폐기됨", returnReasonCode: "12" },
+      },
+    });
+    const { client } = makeClient(() => ({ status: 400, body }));
+    const err = await errorOf(client.get("drug", PATH, {}, 1000));
+    expect(err.code).toBe("UPSTREAM_ERROR");
+    expect(err.message).toContain("경로를 찾지 못했습니다");
+  });
+});

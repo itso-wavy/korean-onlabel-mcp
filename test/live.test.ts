@@ -23,7 +23,7 @@ describe.skipIf(!key)("실제 API", () => {
     expect(result.items.length).toBeGreaterThan(0);
     const permit = await getDevicePermit(client, result.items[0]!.id);
     expect(permit?.basis.text.length).toBeGreaterThan(0);
-  }, 30_000);
+  }, 90_000);
 
   it("의료기기: 모델명 검색이 동작한다", async () => {
     const first = await searchDevices(client, "product", "체온계", 1, 1);
@@ -31,12 +31,12 @@ describe.skipIf(!key)("실제 API", () => {
     expect(model).toBeTruthy();
     const byModel = await searchDevices(client, "model", model!, 1, 5);
     expect(byModel.items.length).toBeGreaterThan(0);
-  }, 30_000);
+  }, 90_000);
 
   it("의약품: 주성분 검색 → 효능효과", async () => {
-    const result = await searchDrugs(client, "ingredient", "아세트아미노펜", 1, 5);
+    const result = await searchDrugs(client, "ingredient", "Acetaminophen", 1, 5);
     expect(result.items.length).toBeGreaterThan(0);
     const permit = await getDrugPermit(client, result.items[0]!.id, false);
     expect(permit?.basis.text.length).toBeGreaterThan(0);
-  }, 30_000);
+  }, 90_000);
 });
