@@ -2,6 +2,12 @@
 
 식약처 허가 원문으로 의약품·의료기기 광고 문구가 허가 범위 안인지 검증하는 MCP 서버입니다.
 
+[![CI](https://github.com/itso-wavy/korean-onlabel-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/itso-wavy/korean-onlabel-mcp/actions/workflows/ci.yml)
+
+![광고 문구 4줄을 넣으면 허가 원문을 조회해 문구마다 근거 있음, 판단 보류, 원문과 충돌, 근거 없음, 해당 없음으로 판정하는 화면](docs/demo.gif)
+
+<sub>광고 문구 및 점검 결과는 사용 방법을 보여 주기 위한 예시입니다.</sub>
+
 > "숙취로 지끈거리는 아침에도 OK"
 >
 > 아세트아미노펜 진통제 광고에 이 문구가 들어가도 될까요? 허가 원문의 효능효과에 숙취는 없습니다. 사용상의 주의사항은 오히려 "알코올을 복용한 사람"에게 이 약을 먹지 말라고 적고 있습니다.
@@ -17,8 +23,6 @@
 이 서버는 공공데이터포털의 식약처 API에서 허가 원문을 가져와, AI가 문구를 원문과 문장 단위로 대조하고 판정마다 원문을 인용하게 합니다.
 
 ## 사용 예시
-
-아래 예시는 2026-11-14에 실제 API로 실행한 결과입니다. 광고 문구는 설명을 위해 지어낸 것이며, 조회한 제품의 실제 광고가 아닙니다.
 
 ### 1. 광고 문구 점검
 
@@ -133,6 +137,20 @@ claude mcp add korean-onlabel -e DATA_GO_KR_SERVICE_KEY=발급받은_키 -- cmd 
   }
 }
 ```
+
+**Codex CLI** (`~/.codex/config.toml`)
+
+```toml
+[mcp_servers.korean-onlabel]
+command = "npx"
+args = ["-y", "github:itso-wavy/korean-onlabel-mcp"]
+env = { DATA_GO_KR_SERVICE_KEY = "발급받은_키" }
+startup_timeout_sec = 120
+```
+
+Codex는 서버 시작을 기본 30초까지 기다립니다. 첫 실행은 내려받기와 빌드 때문에 30초를 넘길 수 있어서 `startup_timeout_sec`를 늘려 둡니다. `codex mcp add` 명령으로도 등록할 수 있지만, 이 값은 설정 파일에서만 바꿀 수 있습니다.
+
+그 밖의 MCP 클라이언트(Cursor, VS Code 등)도 같은 방식으로 `npx -y github:itso-wavy/korean-onlabel-mcp`를 실행하고 환경변수 `DATA_GO_KR_SERVICE_KEY`를 넘기면 됩니다.
 
 키를 넣지 않아도 서버는 뜹니다. 도구를 호출하면 위 신청 절차를 안내하는 오류를 돌려줍니다.
 
