@@ -1,0 +1,53 @@
+{
+  "name": "korean-onlabel-mcp",
+  "version": "0.1.0",
+  "description": "식약처 허가 원문으로 의약품·의료기기 광고 문구가 허가 범위 안인지 검증하는 MCP 서버",
+  "type": "module",
+  "bin": {
+    "korean-onlabel-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:live": "vitest run test/live.test.ts",
+    "start": "node dist/index.js",
+    "inspect": "npx @modelcontextprotocol/inspector node dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "korea",
+    "mfds",
+    "식약처",
+    "의약품",
+    "의료기기",
+    "광고심의",
+    "on-label",
+    "regulatory",
+    "compliance"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itso-wavy/korean-onlabel-mcp.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}
