@@ -1,0 +1,82 @@
+{
+  "header": {
+    "resultCode": "00",
+    "resultMsg": "NORMAL SERVICE."
+  },
+  "body": {
+    "pageNo": 1,
+    "totalCount": 1316,
+    "numOfRows": 3,
+    "items": [
+      {
+        "ITEM_SEQ": "196800036",
+        "ITEM_NAME": "판콜에이내복액",
+        "ITEM_ENG_NAME": "PANCOLD-A Solutions",
+        "ENTP_NAME": "동화약품(주)",
+        "ENTP_ENG_NAME": "Dongwha Pharm. Co., Ltd.",
+        "ENTP_SEQ": "19570006",
+        "ENTP_NO": "1331",
+        "ITEM_PERMIT_DATE": "19680827",
+        "INDUTY": "의약품",
+        "PRDLST_STDR_CODE": "196800036",
+        "SPCLTY_PBLC": "일반의약품",
+        "PRDUCT_TYPE": "[01140]해열.진통.소염제",
+        "PRDUCT_PRMISN_NO": "106",
+        "ITEM_INGR_NAME": "Acetaminophen/Anhydrous Caffeine/Chlorpheniramine Maleate/Guaifenesin/Pentoxyverine Citrate/Phenylephrine Hydrochloride",
+        "ITEM_INGR_CNT": "6",
+        "BIG_PRDT_IMG_URL": "",
+        "PERMIT_KIND_CODE": "신고",
+        "CANCEL_DATE": null,
+        "CANCEL_NAME": "정상",
+        "EDI_CODE": null,
+        "BIZRNO": "1108100102"
+      },
+      {
+        "ITEM_SEQ": "197200483",
+        "ITEM_NAME": "뇌선",
+        "ITEM_ENG_NAME": "Neusun Powder",
+        "ENTP_NAME": "씨에이치디제약주식회사",
+        "ENTP_ENG_NAME": "ChunHeDang Pharm, Co, Ltd.",
+        "ENTP_SEQ": "19570015",
+        "ENTP_NO": "1339",
+        "ITEM_PERMIT_DATE": "19720828",
+        "INDUTY": "의약품",
+        "PRDLST_STDR_CODE": "197200483",
+        "SPCLTY_PBLC": "일반의약품",
+        "PRDUCT_TYPE": "[01140]해열.진통.소염제",
+        "PRDUCT_PRMISN_NO": "2",
+        "ITEM_INGR_NAME": "Acetaminophen/Anhydrous Caffeine",
+        "ITEM_INGR_CNT": "2",
+        "BIG_PRDT_IMG_URL": "",
+        "PERMIT_KIND_CODE": "신고",
+        "CANCEL_DATE": null,
+        "CANCEL_NAME": "정상",
+        "EDI_CODE": null,
+        "BIZRNO": "1308108511"
+      },
+      {
+        "ITEM_SEQ": "197900277",
+        "ITEM_NAME": "게보린정(수출명:돌로린정)",
+        "ITEM_ENG_NAME": "Geworin Tab.",
+        "ENTP_NAME": "삼진제약(주)",
+        "ENTP_ENG_NAME": "SAMJIN PHARM.CO.,LTD",
+        "ENTP_SEQ": "19560011",
+        "ENTP_NO": "1324",
+        "ITEM_PERMIT_DATE": "19790315",
+        "INDUTY": "의약품",
+        "PRDLST_STDR_CODE": "197900277",
+        "SPCLTY_PBLC": "일반의약품",
+        "PRDUCT_TYPE": "[01140]해열.진통.소염제",
+        "PRDUCT_PRMISN_NO": "375",
+        "ITEM_INGR_NAME": "Acetaminophen/Anhydrous Caffeine/Isopropylantipyrine",
+        "ITEM_INGR_CNT": "3",
+        "BIG_PRDT_IMG_URL": "https://nedrug.mfds.go.kr/pbp/cmn/itemImageDownload/1N5PLuAiUvi",
+        "PERMIT_KIND_CODE": "신고",
+        "CANCEL_DATE": null,
+        "CANCEL_NAME": "정상",
+        "EDI_CODE": null,
+        "BIZRNO": "1248531621"
+      }
+    ]
+  }
+}
